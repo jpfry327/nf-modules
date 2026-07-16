@@ -1,0 +1,21 @@
+# Format: nf-core tools 3.x (grouped by channel).
+name: "eclip_full_to_bed"
+description: Convert an entropy .full table to BED for IDR (ENCODE merge_peaks)
+keywords: [eclip, bed, idr, merge_peaks]
+tools:
+  - merge_peaks:
+      description: "ENCODE eCLIP peak merging / IDR toolkit"
+      homepage: "https://github.com/YeoLab/merge_peaks"
+      licence: ["MIT"]
+      identifier: ""
+input:
+  - - meta:
+        type: map
+        description: "Groovy Map with sample info (per replicate)"
+    - entropy_full: { type: file, description: "Per-peak entropy .full table", pattern: "*.entropy.full" }
+output:
+  bed:
+    - - meta: { type: map, description: "Sample info map" }
+      - "*.entropy.bed": { type: file, description: "Entropy-ranked BED for IDR", pattern: "*.entropy.bed" }
+  versions:
+    - "versions.yml": { type: file, description: "Software versions", pattern: "versions.yml" }

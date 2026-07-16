@@ -1,0 +1,31 @@
+# Format: nf-core tools 3.x (grouped by channel).
+name: "eclip_reproducible_peaks"
+description: Final ENCODE reproducible eCLIP peak set across replicates (merge_peaks get_reproducing_peaks)
+keywords: [eclip, idr, reproducible, merge_peaks]
+tools:
+  - merge_peaks:
+      description: "ENCODE eCLIP peak merging / IDR toolkit"
+      homepage: "https://github.com/YeoLab/merge_peaks"
+      licence: ["MIT"]
+      identifier: ""
+input:
+  - - meta:
+        type: map
+        description: "Groovy Map with experiment info (per experiment)"
+    - rep1_idr_normed_full: { type: file, description: "Replicate 1 IDR-normed .full", pattern: "*.normed.bed.full" }
+    - rep2_idr_normed_full: { type: file, description: "Replicate 2 IDR-normed .full", pattern: "*.normed.bed.full" }
+    - rep1_entropy_full: { type: file, description: "Replicate 1 entropy .full", pattern: "*.entropy.full" }
+    - rep2_entropy_full: { type: file, description: "Replicate 2 entropy .full", pattern: "*.entropy.full" }
+    - idr_out: { type: file, description: "IDR output table", pattern: "*.idr.out" }
+output:
+  bed:
+    - - meta: { type: map, description: "Experiment info map" }
+      - "*.reproducible_peaks.bed": { type: file, description: "Reproducible peaks (geomean l2fc >= 3 and -log10p >= 3 in both reps)", pattern: "*.reproducible_peaks.bed" }
+  custombed:
+    - - meta: { type: map, description: "Experiment info map" }
+      - "*.reproducible_peaks.custombed": { type: file, description: "Reproducible peaks with per-replicate detail", pattern: "*.reproducible_peaks.custombed" }
+  reproducing_full:
+    - - meta: { type: map, description: "Experiment info map" }
+      - "*.reproducing.full": { type: file, description: "Per-replicate reproducing .full tables", pattern: "*.reproducing.full" }
+  versions:
+    - "versions.yml": { type: file, description: "Software versions", pattern: "versions.yml" }

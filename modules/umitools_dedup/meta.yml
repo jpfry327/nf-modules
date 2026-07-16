@@ -1,0 +1,32 @@
+# Format: nf-core tools 3.x (grouped by channel). If you adopt nf-core tooling,
+# run `nf-core modules lint --fix` to reconcile with your installed version.
+name: "umitools_dedup"
+description: Deduplicate aligned reads by UMI + position with UMI-tools
+keywords: [umi, deduplication, bam]
+tools:
+  - umitools:
+      description: "Tools for handling Unique Molecular Identifiers"
+      homepage: "https://github.com/CGATOxford/UMI-tools"
+      licence: ["MIT"]
+      identifier: "biotools:umi-tools"
+input:
+  - - meta:
+        type: map
+        description: "Groovy Map with sample info"
+    - bam:
+        type: file
+        description: "Coordinate-sorted BAM"
+        pattern: "*.bam"
+    - bai:
+        type: file
+        description: "BAM index"
+        pattern: "*.bai"
+output:
+  bam:
+    - - meta: { type: map, description: "Sample info map" }
+      - "*.dedup.bam": { type: file, description: "Deduplicated BAM", pattern: "*.dedup.bam" }
+  stats:
+    - - meta: { type: map, description: "Sample info map" }
+      - "*_stats*": { type: file, description: "Dedup statistics (with --output-stats)", pattern: "*_stats*" }
+  versions:
+    - "versions.yml": { type: file, description: "Software versions", pattern: "versions.yml" }

@@ -1,0 +1,29 @@
+# Format: nf-core tools 3.x (grouped by channel). If you adopt nf-core tooling,
+# run `nf-core modules lint --fix` to reconcile with your installed version.
+name: "deeptools_bamcoverage"
+description: Generate a coverage bigWig track from a BAM with deepTools bamCoverage
+keywords: [coverage, bigwig, deeptools]
+tools:
+  - deeptools:
+      description: "Tools for exploring deep-sequencing data"
+      homepage: "https://deeptools.readthedocs.io"
+      licence: ["BSD-3-Clause"]
+      identifier: "biotools:deeptools"
+input:
+  - - meta:
+        type: map
+        description: "Groovy Map with sample info"
+    - bam:
+        type: file
+        description: "Coordinate-sorted BAM"
+        pattern: "*.bam"
+    - bai:
+        type: file
+        description: "BAM index"
+        pattern: "*.bai"
+output:
+  bigwig:
+    - - meta: { type: map, description: "Sample info map" }
+      - "*.bw": { type: file, description: "Coverage bigWig track", pattern: "*.bw" }
+  versions:
+    - "versions.yml": { type: file, description: "Software versions", pattern: "versions.yml" }

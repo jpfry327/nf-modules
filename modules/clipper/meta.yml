@@ -1,0 +1,29 @@
+# Format: nf-core tools 3.x (grouped by channel). If you adopt nf-core tooling,
+# run `nf-core modules lint --fix` to reconcile with your installed version.
+name: "clipper"
+description: Call CLIP peak clusters from a BAM with CLIPper
+keywords: [clip, eclip, peaks]
+tools:
+  - clipper:
+      description: "CLIP peak enrichment tool from the Yeo lab"
+      homepage: "https://github.com/YeoLab/clipper"
+      licence: ["GPL-2.0"]
+      identifier: "biotools:clipper"
+input:
+  - - meta:
+        type: map
+        description: "Groovy Map with sample info (per replicate)"
+    - bam:
+        type: file
+        description: "Position-sorted, deduplicated CLIP BAM"
+        pattern: "*.bam"
+    - bai:
+        type: file
+        description: "BAM index"
+        pattern: "*.bai"
+output:
+  peaks:
+    - - meta: { type: map, description: "Sample info map" }
+      - "*.peakClusters.bed": { type: file, description: "CLIPper peak clusters", pattern: "*.peakClusters.bed" }
+  versions:
+    - "versions.yml": { type: file, description: "Software versions", pattern: "versions.yml" }

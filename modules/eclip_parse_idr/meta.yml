@@ -1,0 +1,23 @@
+# Format: nf-core tools 3.x (grouped by channel).
+name: "eclip_parse_idr"
+description: Parse IDR-reproducible eCLIP peaks passing enrichment/significance thresholds (ENCODE merge_peaks)
+keywords: [eclip, idr, peaks, merge_peaks]
+tools:
+  - merge_peaks:
+      description: "ENCODE eCLIP peak merging / IDR toolkit"
+      homepage: "https://github.com/YeoLab/merge_peaks"
+      licence: ["MIT"]
+      identifier: ""
+input:
+  - - meta:
+        type: map
+        description: "Groovy Map with experiment info (per experiment)"
+    - idr_out: { type: file, description: "IDR output table", pattern: "*.idr.out" }
+    - rep1_entropy_full: { type: file, description: "Replicate 1 entropy .full", pattern: "*.entropy.full" }
+    - rep2_entropy_full: { type: file, description: "Replicate 2 entropy .full", pattern: "*.entropy.full" }
+output:
+  bed:
+    - - meta: { type: map, description: "Experiment info map" }
+      - "*.idr.parsed.bed": { type: file, description: "IDR-reproducible peak regions", pattern: "*.idr.parsed.bed" }
+  versions:
+    - "versions.yml": { type: file, description: "Software versions", pattern: "versions.yml" }

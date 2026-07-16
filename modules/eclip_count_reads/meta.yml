@@ -1,0 +1,25 @@
+# Format: nf-core tools 3.x (grouped by channel).
+name: "eclip_count_reads"
+description: Count mapped reads in CLIP and input BAMs for eCLIP input normalisation
+keywords: [eclip, samtools, normalisation]
+tools:
+  - samtools:
+      description: "Tools for manipulating alignments in SAM/BAM format"
+      homepage: "https://www.htslib.org"
+      licence: ["MIT"]
+      identifier: "biotools:samtools"
+input:
+  - - meta:
+        type: map
+        description: "Groovy Map with sample info (per replicate)"
+    - clip_bam: { type: file, description: "CLIP BAM", pattern: "*.bam" }
+    - clip_bai: { type: file, description: "CLIP BAM index", pattern: "*.bai" }
+    - input_bam: { type: file, description: "SMInput BAM", pattern: "*.bam" }
+    - input_bai: { type: file, description: "SMInput BAM index", pattern: "*.bai" }
+output:
+  counts:
+    - - meta: { type: map, description: "Sample info map" }
+      - "*.clip.readnum.txt": { type: file, description: "CLIP mapped-read count", pattern: "*.clip.readnum.txt" }
+      - "*.input.readnum.txt": { type: file, description: "Input mapped-read count", pattern: "*.input.readnum.txt" }
+  versions:
+    - "versions.yml": { type: file, description: "Software versions", pattern: "versions.yml" }

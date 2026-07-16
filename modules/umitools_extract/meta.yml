@@ -1,0 +1,28 @@
+# Format: nf-core tools 3.x (grouped by channel). If you adopt nf-core tooling,
+# run `nf-core modules lint --fix` to reconcile with your installed version.
+name: "umitools_extract"
+description: Extract in-line UMIs from reads into the read name with UMI-tools
+keywords: [umi, deduplication, fastq]
+tools:
+  - umitools:
+      description: "Tools for handling Unique Molecular Identifiers"
+      homepage: "https://github.com/CGATOxford/UMI-tools"
+      licence: ["MIT"]
+      identifier: "biotools:umi-tools"
+input:
+  - - meta:
+        type: map
+        description: "Groovy Map with sample info"
+    - reads:
+        type: file
+        description: "FASTQ carrying the in-line UMI"
+        pattern: "*.{fastq,fq}.gz"
+output:
+  reads:
+    - - meta: { type: map, description: "Sample info map" }
+      - "*.umi.fastq.gz": { type: file, description: "Reads with the UMI moved to the read name", pattern: "*.umi.fastq.gz" }
+  log:
+    - - meta: { type: map, description: "Sample info map" }
+      - "*.umi.log": { type: file, description: "UMI-tools extract log", pattern: "*.umi.log" }
+  versions:
+    - "versions.yml": { type: file, description: "Software versions", pattern: "versions.yml" }

@@ -1,0 +1,26 @@
+# Format: nf-core tools 3.x (grouped by channel).
+name: "eclip_peak_entropy"
+description: Compute per-peak information content (entropy) for IDR ranking (ENCODE merge_peaks)
+keywords: [eclip, entropy, merge_peaks]
+tools:
+  - merge_peaks:
+      description: "ENCODE eCLIP peak merging / IDR toolkit"
+      homepage: "https://github.com/YeoLab/merge_peaks"
+      licence: ["MIT"]
+      identifier: ""
+input:
+  - - meta:
+        type: map
+        description: "Groovy Map with sample info (per replicate)"
+    - compressed_full: { type: file, description: "Compressed peaks .full table", pattern: "*.compressed.full" }
+    - clip_reads: { type: file, description: "CLIP mapped-read count", pattern: "*.txt" }
+    - input_reads: { type: file, description: "Input mapped-read count", pattern: "*.txt" }
+output:
+  full:
+    - - meta: { type: map, description: "Sample info map" }
+      - "*.entropy.full": { type: file, description: "Per-peak entropy table", pattern: "*.entropy.full" }
+  excess:
+    - - meta: { type: map, description: "Sample info map" }
+      - "*.excess_reads": { type: file, description: "Excess reads per peak", pattern: "*.excess_reads" }
+  versions:
+    - "versions.yml": { type: file, description: "Software versions", pattern: "versions.yml" }

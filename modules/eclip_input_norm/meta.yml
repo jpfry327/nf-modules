@@ -1,0 +1,30 @@
+# Format: nf-core tools 3.x (grouped by channel).
+name: "eclip_input_norm"
+description: Normalise CLIP peaks against size-matched input (ENCODE merge_peaks overlap step)
+keywords: [eclip, normalisation, merge_peaks]
+tools:
+  - merge_peaks:
+      description: "ENCODE eCLIP peak merging / IDR toolkit"
+      homepage: "https://github.com/YeoLab/merge_peaks"
+      licence: ["MIT"]
+      identifier: ""
+input:
+  - - meta:
+        type: map
+        description: "Groovy Map with sample info (per replicate)"
+    - clip_bam: { type: file, description: "CLIP BAM", pattern: "*.bam" }
+    - clip_bai: { type: file, description: "CLIP BAM index", pattern: "*.bai" }
+    - input_bam: { type: file, description: "SMInput BAM", pattern: "*.bam" }
+    - input_bai: { type: file, description: "SMInput BAM index", pattern: "*.bai" }
+    - peaks: { type: file, description: "Peak BED to normalise (CLIPper clusters or parsed IDR peaks)", pattern: "*.bed" }
+    - clip_reads: { type: file, description: "CLIP mapped-read count", pattern: "*.txt" }
+    - input_reads: { type: file, description: "Input mapped-read count", pattern: "*.txt" }
+output:
+  bed:
+    - - meta: { type: map, description: "Sample info map" }
+      - "*.normed.bed": { type: file, description: "Input-normalised peaks", pattern: "*.normed.bed" }
+  full:
+    - - meta: { type: map, description: "Sample info map" }
+      - "*.normed.bed.full": { type: file, description: "Full normalised peak table", pattern: "*.normed.bed.full" }
+  versions:
+    - "versions.yml": { type: file, description: "Software versions", pattern: "versions.yml" }

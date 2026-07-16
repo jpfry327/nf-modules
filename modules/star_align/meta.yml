@@ -1,8 +1,8 @@
 # Format: nf-core tools 3.x (grouped by channel). If you adopt nf-core tooling,
 # run `nf-core modules lint --fix` to reconcile with your installed version.
 name: "star_align"
-description: Splice-aware alignment of RNA reads to a genome with STAR
-keywords: [alignment, rna, star]
+description: Alignment of reads to a genome with STAR (single- or paired-end)
+keywords: [alignment, rna, star, clip]
 tools:
   - star:
       description: "Spliced Transcripts Alignment to a Reference"
@@ -12,24 +12,30 @@ tools:
 input:
   - - meta:
         type: map
-        description: "Groovy Map with sample info"
+        description: "Groovy Map with sample info; set single_end for read layout"
     - reads:
         type: file
-        description: "Trimmed FASTQ files [ read1, read2 ]"
+        description: "FASTQ file(s); single-end: 1 file, paired-end: [ read1, read2 ]"
         pattern: "*.{fastq,fq}.gz"
   - index:
       type: directory
       description: "STAR genome index directory"
   - gtf:
       type: file
-      description: "GTF annotation for splice junctions"
+      description: "GTF annotation for splice junctions; pass [] to skip"
       pattern: "*.gtf"
 output:
   bam:
     - - meta: { type: map, description: "Sample info map" }
-      - "*Aligned.sortedByCoord.out.bam": { type: file, description: "Coordinate-sorted BAM", pattern: "*.bam" }
+      - "*Aligned*.bam": { type: file, description: "Aligned BAM (sorted or unsorted per ext.args)", pattern: "*.bam" }
+  unmapped:
+    - - meta: { type: map, description: "Sample info map" }
+      - "*Unmapped.out.mate*": { type: file, description: "Unmapped reads (with --outReadsUnmapped Fastx)", pattern: "*Unmapped.out.mate*" }
   log_final:
     - - meta: { type: map, description: "Sample info map" }
       - "*Log.final.out": { type: file, description: "STAR final log", pattern: "*Log.final.out" }
+  gene_counts:
+    - - meta: { type: map, description: "Sample info map" }
+      - "*ReadsPerGene.out.tab": { type: file, description: "Per-gene counts (with --quantMode GeneCounts)", pattern: "*ReadsPerGene.out.tab" }
   versions:
     - "versions.yml": { type: file, description: "Software versions", pattern: "versions.yml" }

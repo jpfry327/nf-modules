@@ -1,0 +1,24 @@
+# Format: nf-core tools 3.x (grouped by channel).
+name: "eclip_compress_peaks"
+description: Collapse overlapping normalised peaks keeping the most significant (ENCODE merge_peaks)
+keywords: [eclip, peaks, merge_peaks]
+tools:
+  - merge_peaks:
+      description: "ENCODE eCLIP peak merging / IDR toolkit"
+      homepage: "https://github.com/YeoLab/merge_peaks"
+      licence: ["MIT"]
+      identifier: ""
+input:
+  - - meta:
+        type: map
+        description: "Groovy Map with sample info (per replicate)"
+    - normed_full: { type: file, description: "Normalised peak .full table", pattern: "*.normed.bed.full" }
+output:
+  bed:
+    - - meta: { type: map, description: "Sample info map" }
+      - "*.compressed.bed": { type: file, description: "Compressed peaks BED", pattern: "*.compressed.bed" }
+  full:
+    - - meta: { type: map, description: "Sample info map" }
+      - "*.compressed.full": { type: file, description: "Compressed peaks .full table", pattern: "*.compressed.full" }
+  versions:
+    - "versions.yml": { type: file, description: "Software versions", pattern: "versions.yml" }

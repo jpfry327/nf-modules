@@ -1,0 +1,26 @@
+# Format: nf-core tools 3.x (grouped by channel). If you adopt nf-core tooling,
+# run `nf-core modules lint --fix` to reconcile with your installed version.
+name: "idr"
+description: Irreproducible Discovery Rate across two replicate peak sets
+keywords: [idr, reproducibility, peaks]
+tools:
+  - idr:
+      description: "Measure reproducibility between replicate ranked peak lists"
+      homepage: "https://github.com/nboley/idr"
+      licence: ["GPL-2.0"]
+      identifier: "biotools:idr"
+input:
+  - - meta:
+        type: map
+        description: "Groovy Map with experiment info (per experiment)"
+    - rep1_bed: { type: file, description: "Replicate 1 ranked peak BED", pattern: "*.bed" }
+    - rep2_bed: { type: file, description: "Replicate 2 ranked peak BED", pattern: "*.bed" }
+output:
+  idr:
+    - - meta: { type: map, description: "Experiment info map" }
+      - "*.idr.out": { type: file, description: "IDR output table", pattern: "*.idr.out" }
+  plot:
+    - - meta: { type: map, description: "Experiment info map" }
+      - "*.idr.out.png": { type: file, description: "IDR diagnostic plot (with --plot)", pattern: "*.idr.out.png" }
+  versions:
+    - "versions.yml": { type: file, description: "Software versions", pattern: "versions.yml" }

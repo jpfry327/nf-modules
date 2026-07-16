@@ -1,0 +1,28 @@
+# Format: nf-core tools 3.x (grouped by channel). If you adopt nf-core tooling,
+# run `nf-core modules lint --fix` to reconcile with your installed version.
+name: "cutadapt"
+description: Adapter and quality trimming of FastQ files with cutadapt
+keywords: [trimming, adapters, fastq]
+tools:
+  - cutadapt:
+      description: "Remove adapter sequences from sequencing reads"
+      homepage: "https://cutadapt.readthedocs.io"
+      licence: ["MIT"]
+      identifier: "biotools:cutadapt"
+input:
+  - - meta:
+        type: map
+        description: "Groovy Map with sample info; set single_end for read layout"
+    - reads:
+        type: file
+        description: "FASTQ file(s); single-end: 1 file, paired-end: [ read1, read2 ]"
+        pattern: "*.{fastq,fq}.gz"
+output:
+  reads:
+    - - meta: { type: map, description: "Sample info map" }
+      - "*.trim.fastq.gz": { type: file, description: "Trimmed reads", pattern: "*.trim.fastq.gz" }
+  log:
+    - - meta: { type: map, description: "Sample info map" }
+      - "*.cutadapt.log": { type: file, description: "cutadapt report (MultiQC-parsable)", pattern: "*.cutadapt.log" }
+  versions:
+    - "versions.yml": { type: file, description: "Software versions", pattern: "versions.yml" }
