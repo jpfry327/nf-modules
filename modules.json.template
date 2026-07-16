@@ -1,0 +1,10 @@
+{
+  "name": "my-pipeline",
+  "description": "Provenance of vendored modules. Copy to modules/local/modules.json and fill in.",
+  "modules": {
+    "nf-modules": {
+      "fastp":  { "git_sha": "<commit-sha-you-copied-from>", "source": "nf-modules/modules/fastp" },
+      "fastqc": { "git_sha": "<commit-sha>",                 "source": "nf-modules/modules/fastqc" }
+    }
+  }
+}

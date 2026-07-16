@@ -1,0 +1,35 @@
+# Format: nf-core tools 3.x (grouped by channel). If you adopt nf-core tooling,
+# run `nf-core modules lint --fix` to reconcile with your installed version.
+name: "star_align"
+description: Splice-aware alignment of RNA reads to a genome with STAR
+keywords: [alignment, rna, star]
+tools:
+  - star:
+      description: "Spliced Transcripts Alignment to a Reference"
+      homepage: "https://github.com/alexdobin/STAR"
+      licence: ["MIT"]
+      identifier: "biotools:star"
+input:
+  - - meta:
+        type: map
+        description: "Groovy Map with sample info"
+    - reads:
+        type: file
+        description: "Trimmed FASTQ files [ read1, read2 ]"
+        pattern: "*.{fastq,fq}.gz"
+  - index:
+      type: directory
+      description: "STAR genome index directory"
+  - gtf:
+      type: file
+      description: "GTF annotation for splice junctions"
+      pattern: "*.gtf"
+output:
+  bam:
+    - - meta: { type: map, description: "Sample info map" }
+      - "*Aligned.sortedByCoord.out.bam": { type: file, description: "Coordinate-sorted BAM", pattern: "*.bam" }
+  log_final:
+    - - meta: { type: map, description: "Sample info map" }
+      - "*Log.final.out": { type: file, description: "STAR final log", pattern: "*Log.final.out" }
+  versions:
+    - "versions.yml": { type: file, description: "Software versions", pattern: "versions.yml" }

@@ -1,0 +1,25 @@
+# Format: nf-core tools 3.x (grouped by channel). If you adopt nf-core tooling,
+# run `nf-core modules lint --fix` to reconcile with your installed version.
+name: "samtools_index"
+description: Index a coordinate-sorted BAM with samtools
+keywords: [index, bam, samtools]
+tools:
+  - samtools:
+      description: "Tools for manipulating SAM/BAM/CRAM"
+      homepage: "https://www.htslib.org/"
+      licence: ["MIT"]
+      identifier: "biotools:samtools"
+input:
+  - - meta:
+        type: map
+        description: "Groovy Map with sample info"
+    - bam:
+        type: file
+        description: "Coordinate-sorted BAM"
+        pattern: "*.bam"
+output:
+  bai:
+    - - meta: { type: map, description: "Sample info map" }
+      - "*.bai": { type: file, description: "BAM index", pattern: "*.bai" }
+  versions:
+    - "versions.yml": { type: file, description: "Software versions", pattern: "versions.yml" }

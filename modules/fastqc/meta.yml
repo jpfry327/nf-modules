@@ -1,0 +1,28 @@
+# Format: nf-core tools 3.x (grouped by channel). If you adopt nf-core tooling,
+# run `nf-core modules lint --fix` to reconcile with your installed version.
+name: "fastqc"
+description: Run FastQC on raw or trimmed reads
+keywords: [quality control, fastq, qc]
+tools:
+  - fastqc:
+      description: "Quality control tool for high throughput sequence data"
+      homepage: "https://www.bioinformatics.babraham.ac.uk/projects/fastqc/"
+      licence: ["GPL-2.0-only"]
+      identifier: "biotools:fastqc"
+input:
+  - - meta:
+        type: map
+        description: "Groovy Map with sample info, e.g. [ id:'s1', single_end:false ]"
+    - reads:
+        type: file
+        description: "Input FASTQ files"
+        pattern: "*.{fastq,fq}.gz"
+output:
+  html:
+    - - meta: { type: map, description: "Sample info map" }
+      - "*.html": { type: file, description: "FastQC HTML report", pattern: "*.html" }
+  zip:
+    - - meta: { type: map, description: "Sample info map" }
+      - "*.zip": { type: file, description: "FastQC report archive", pattern: "*.zip" }
+  versions:
+    - "versions.yml": { type: file, description: "Software versions", pattern: "versions.yml" }

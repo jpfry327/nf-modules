@@ -1,0 +1,31 @@
+# Format: nf-core tools 3.x (grouped by channel). If you adopt nf-core tooling,
+# run `nf-core modules lint --fix` to reconcile with your installed version.
+name: "fastp"
+description: Adapter/quality trimming of paired-end FastQ files
+keywords: [trimming, fastq, quality control]
+tools:
+  - fastp:
+      description: "All-in-one FASTQ preprocessor"
+      homepage: "https://github.com/OpenGene/fastp"
+      licence: ["MIT"]
+      identifier: "biotools:fastp"
+input:
+  - - meta:
+        type: map
+        description: "Groovy Map with sample info, e.g. [ id:'s1', single_end:false ]"
+    - reads:
+        type: file
+        description: "Paired-end FASTQ files [ read1, read2 ]"
+        pattern: "*.{fastq,fq}.gz"
+output:
+  reads:
+    - - meta: { type: map, description: "Sample info map" }
+      - "*.trim.fastq.gz": { type: file, description: "Trimmed reads", pattern: "*.trim.fastq.gz" }
+  json:
+    - - meta: { type: map, description: "Sample info map" }
+      - "*.fastp.json": { type: file, description: "fastp JSON report", pattern: "*.fastp.json" }
+  html:
+    - - meta: { type: map, description: "Sample info map" }
+      - "*.fastp.html": { type: file, description: "fastp HTML report", pattern: "*.fastp.html" }
+  versions:
+    - "versions.yml": { type: file, description: "Software versions", pattern: "versions.yml" }

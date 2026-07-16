@@ -1,0 +1,35 @@
+# Format: nf-core tools 3.x (grouped by channel). If you adopt nf-core tooling,
+# run `nf-core modules lint --fix` to reconcile with your installed version.
+name: "macs2_callpeak"
+description: Call enrichment peaks of a treatment (IP) BAM over a control (input) BAM
+keywords: [peak calling, enrichment, macs2]
+tools:
+  - macs2:
+      description: "Model-based Analysis of ChIP-Seq"
+      homepage: "https://github.com/macs3-project/MACS"
+      licence: ["BSD-3-Clause"]
+      identifier: "biotools:macs"
+input:
+  - - meta:
+        type: map
+        description: "Groovy Map with sample info for the IP sample"
+    - ipbam:
+        type: file
+        description: "Treatment/IP BAM"
+        pattern: "*.bam"
+    - controlbam:
+        type: file
+        description: "Control/input BAM"
+        pattern: "*.bam"
+  - macs2_gsize:
+      type: string
+      description: "Effective genome size (e.g. 2700000000 for hg38)"
+output:
+  peak:
+    - - meta: { type: map, description: "Sample info map" }
+      - "*.narrowPeak": { type: file, description: "narrowPeak peaks", pattern: "*.narrowPeak" }
+  xls:
+    - - meta: { type: map, description: "Sample info map" }
+      - "*_peaks.xls": { type: file, description: "MACS2 peak table", pattern: "*_peaks.xls" }
+  versions:
+    - "versions.yml": { type: file, description: "Software versions", pattern: "versions.yml" }

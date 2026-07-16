@@ -1,0 +1,22 @@
+# Format: nf-core tools 3.x (grouped by channel). If you adopt nf-core tooling,
+# run `nf-core modules lint --fix` to reconcile with your installed version.
+name: "multiqc"
+description: Aggregate QC reports from many tools into one HTML report
+keywords: [report, qc, multiqc]
+tools:
+  - multiqc:
+      description: "Aggregate bioinformatics results across samples into a single report"
+      homepage: "https://multiqc.info/"
+      licence: ["GPL-3.0-or-later"]
+      identifier: "biotools:multiqc"
+input:
+  - "*":
+      type: file
+      description: "QC output files from upstream tools"
+output:
+  report:
+    - "multiqc_report.html": { type: file, description: "MultiQC report", pattern: "multiqc_report.html" }
+  data:
+    - "multiqc_data": { type: directory, description: "MultiQC data directory" }
+  versions:
+    - "versions.yml": { type: file, description: "Software versions", pattern: "versions.yml" }
