@@ -1,0 +1,35 @@
+nextflow_process {
+
+    name "Test Process FASTP"
+    script "../main.nf"
+    process "FASTP"
+    tag "fastp"
+
+    test("paired-end - stub") {
+
+        tag "stub"
+        options "-stub"
+
+        when {
+            process {
+                """
+                input[0] = [
+                    [ id:'test' ],
+                    [ file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/fastq/test_1.fastq.gz', checkIfExists: true),
+                      file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/fastq/test_2.fastq.gz', checkIfExists: true) ]
+                ]
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert process.out.reads[0][1].size() == 2 },
+                { assert process.out.json },
+                { assert process.out.html },
+                { assert path(process.out.versions[0]).text.contains("fastp") }
+            )
+        }
+    }
+}

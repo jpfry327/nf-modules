@@ -1,0 +1,32 @@
+name: nf-test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  nf-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Install Nextflow
+        uses: nf-core/setup-nextflow@v2
+
+      - name: Install nf-test
+        run: |
+          curl -fsSL https://get.nf-test.com | bash
+          sudo mv nf-test /usr/local/bin/
+
+      - name: Stub tests (no containers)
+        run: nf-test test --ci --tag stub
+
+      - name: Full tests (docker)
+        run: nf-test test --ci --tag full --profile docker

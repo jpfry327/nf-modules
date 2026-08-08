@@ -2,9 +2,9 @@
 // Trim reads, align to the genome with STAR, index the BAM.
 // Reusable across any paired-end RNA assay (RIP-seq, RNA-seq, CLIP, ...).
 //
-include { FASTP          } from '../../modules/fastp/main'
-include { STAR_ALIGN     } from '../../modules/star_align/main'
-include { SAMTOOLS_INDEX } from '../../modules/samtools_index/main'
+include { FASTP          } from '../../../modules/jpfry327/fastp/main'
+include { STAR_ALIGN     } from '../../../modules/jpfry327/star/align/main'
+include { SAMTOOLS_INDEX } from '../../../modules/jpfry327/samtools/index/main'
 
 workflow FASTQ_ALIGN_STAR {
 
