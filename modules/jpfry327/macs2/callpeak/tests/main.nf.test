@@ -1,0 +1,34 @@
+nextflow_process {
+
+    name "Test Process MACS2_CALLPEAK"
+    script "../main.nf"
+    process "MACS2_CALLPEAK"
+    tag "macs2/callpeak"
+
+    test("ip + control bam - stub") {
+
+        tag "stub"
+        options "-stub"
+
+        when {
+            process {
+                """
+                input[0] = [
+                    [ id:'test' ],
+                    file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/bam/test.paired_end.sorted.bam', checkIfExists: true),
+                    file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/bam/test.single_end.sorted.bam', checkIfExists: true)
+                ]
+                input[1] = 29903
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert process.out.xls },
+                { assert path(process.out.versions[0]).text.contains("macs2") }
+            )
+        }
+    }
+}

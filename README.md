@@ -1,35 +1,54 @@
 # nf-modules
 
-Personal library of hand-written Nextflow DSL2 modules. Single source of truth;
-pipelines **vendor** (copy) what they need rather than depending on this repo at runtime.
+Personal library of Nextflow DSL2 modules in **nf-core custom-remote format**.
+Modules are authored and tested here, then pulled into pipelines with the nf-core CLI —
+which copies the files *and* records the source commit in the pipeline's `modules.json`.
 
 ## Layout
+
 ```
-modules/<tool>/main.nf     the process (meta map, ext.args, versions block)
-modules/<tool>/meta.yml    documentation (nf-core-lint compatible)
-subworkflows/<name>/main.nf reusable module chains
+.nf-core.yml                                  repository_type: modules, org_path: jpfry327
+modules/jpfry327/<tool>[/<subtool>]/
+    main.nf                                   process (meta map, ext.args, container, stub)
+    environment.yml                           pinned conda env (matches the container)
+    meta.yml                                  interface docs
+    tests/main.nf.test                        nf-test (stub test minimum)
+subworkflows/jpfry327/<name>/                 reusable module chains
+tests/config/nf-test.config                   test params + docker/singularity/conda profiles
+.github/workflows/nf-test.yml                 CI: stub tests (no containers) + docker tests
 ```
 
-## House conventions
-- Every channel is `[ meta, files ]`; modules key off `meta` (never hardcode meta field names).
-- Tool options come from the pipeline's `conf/modules.config` via `task.ext.args` — not the module.
-- Output basenames use `task.ext.prefix ?: meta.id`.
-- Every module emits `versions.yml`.
-- Modules carry NO container/conda directive. The image is declared per-process in the
-  consuming pipeline's `conf/containers.config` (singularity `oras://` URI or local `.sif`).
-- Resource label is one of `process_low|process_medium|process_high`.
+## Authoring a module (from anywhere, including your phone)
 
-## Using a module in a pipeline (vendoring)
-Copy the module folder into your pipeline's `modules/local/`, then record where it came from:
+Point a Claude Code session at this repo and ask for the tool you need — the
+`new-module` skill drives the process:
+
+1. Check nf-core/modules upstream. If the tool already exists there, stop: install it
+   straight from nf-core in your pipeline instead of duplicating it here.
+2. Otherwise scaffold `modules/jpfry327/<tool>/` (four files, modeled on `fastqc/`).
+3. Verify: `nf-test test modules/jpfry327/<tool> --tag stub` locally, or push a branch
+   and let the `nf-test` GitHub Actions workflow run it.
+4. Merge to `main` when green.
+
+## Using a module in a pipeline (at the HPC)
+
 ```bash
-cp -r nf-modules/modules/fastp  my-pipeline/modules/local/fastp
-# then log the source commit in my-pipeline/modules/local/modules.json (see that file)
-```
-Re-vendor deliberately when you want a library fix; pipelines don't auto-update.
+pip install nf-core
+cd my-pipeline    # needs .nf-core.yml with repository_type: pipeline
 
-## nf-core tooling (optional)
-`nf-core modules install` can vendor from this repo AND record the git SHA for you
-(`--git-remote <this-repo-url>`). If you go that route you'll also want `environment.yml`
-and `tests/` per module, and the `conda "${moduleDir}/environment.yml"` container idiom.
-The meta.yml files here are written for that format; run `nf-core modules lint --fix`
-to reconcile with your installed tools version.
+# from this library:
+nf-core modules install --git-remote https://github.com/jpfry327/nf-modules.git --branch main fastp
+
+# tools that live in the official repo install directly:
+nf-core modules install fastqc
+```
+
+`--branch main` is required (the CLI defaults to `master`). Updates later:
+`nf-core modules update --git-remote ... --branch main <tool>`.
+
+## Local testing
+
+```bash
+nf-test test --tag stub                    # every stub test, no containers needed
+nf-test test --tag full --profile docker   # real-tool tests
+```

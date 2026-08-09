@@ -1,0 +1,30 @@
+nextflow_process {
+
+    name "Test Process MULTIQC"
+    script "../main.nf"
+    process "MULTIQC"
+    tag "multiqc"
+
+    test("qc files - stub") {
+
+        tag "stub"
+        options "-stub"
+
+        when {
+            process {
+                """
+                input[0] = [ file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/fastq/test_1.fastq.gz', checkIfExists: true) ]
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert process.out.report },
+                { assert process.out.data },
+                { assert path(process.out.versions[0]).text.contains("multiqc") }
+            )
+        }
+    }
+}

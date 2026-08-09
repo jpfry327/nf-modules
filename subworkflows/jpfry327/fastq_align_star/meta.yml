@@ -1,0 +1,31 @@
+name: fastq_align_star
+description: Trim paired-end reads with fastp, align with STAR, index the BAM
+keywords:
+  - fastq
+  - trim
+  - align
+  - star
+components:
+  - fastp
+  - star/align
+  - samtools/index
+input:
+  - ch_reads:
+      description: "Channel of [ val(meta), [ read1, read2 ] ]"
+  - ch_index:
+      description: "Channel with the STAR genome index directory"
+  - ch_gtf:
+      description: "Channel with the GTF annotation"
+output:
+  - bam:
+      description: "[ meta, sorted bam ]"
+  - bai:
+      description: "[ meta, bam index ]"
+  - fastp_json:
+      description: "[ meta, fastp json report ]"
+  - star_log:
+      description: "[ meta, STAR Log.final.out ]"
+  - versions:
+      description: "versions.yml files from all components"
+authors:
+  - "@jpfry327"

@@ -1,0 +1,59 @@
+nextflow_process {
+
+    name "Test Process FASTQC"
+    script "../main.nf"
+    process "FASTQC"
+    tag "fastqc"
+
+    test("paired-end - stub") {
+
+        tag "stub"
+        options "-stub"
+
+        when {
+            process {
+                """
+                input[0] = [
+                    [ id:'test' ],
+                    [ file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/fastq/test_1.fastq.gz', checkIfExists: true),
+                      file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/fastq/test_2.fastq.gz', checkIfExists: true) ]
+                ]
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert process.out.html },
+                { assert process.out.zip },
+                { assert path(process.out.versions[0]).text.contains("fastqc") }
+            )
+        }
+    }
+
+    test("paired-end - docker") {
+
+        tag "full"
+
+        when {
+            process {
+                """
+                input[0] = [
+                    [ id:'test' ],
+                    [ file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/fastq/test_1.fastq.gz', checkIfExists: true),
+                      file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/fastq/test_2.fastq.gz', checkIfExists: true) ]
+                ]
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert process.out.zip[0][1].size() == 2 },
+                { assert path(process.out.versions[0]).text.contains("fastqc") }
+            )
+        }
+    }
+}
