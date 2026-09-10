@@ -2,10 +2,9 @@ process FASTQC {
     tag "$meta.id"
     label 'process_medium'
 
-    conda "${moduleDir}/environment.yml"
-    container "${ workflow.containerEngine in ['singularity', 'apptainer'] && !task.ext.singularity_pull_docker_container
-        ? 'https://depot.galaxyproject.org/singularity/fastqc:0.12.1--hdfd78af_0'
-        : 'quay.io/biocontainers/fastqc:0.12.1--hdfd78af_0' }"
+    // Single image for docker and singularity (Nextflow prefixes docker:// as needed).
+    // Override per pipeline in conf/modules.config: withName: 'FASTQC' { container = '...' }
+    container 'quay.io/biocontainers/fastqc:0.12.1--hdfd78af_0'
 
     input:
     tuple val(meta), path(reads)

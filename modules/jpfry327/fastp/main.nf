@@ -2,10 +2,9 @@ process FASTP {
     tag "$meta.id"
     label 'process_medium'
 
-    conda "${moduleDir}/environment.yml"
-    container "${ workflow.containerEngine in ['singularity', 'apptainer'] && !task.ext.singularity_pull_docker_container
-        ? 'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/d0/d013aad5427d824afe472e6607ea47685ff0181f1fb09e52a179e0ec39e43e88/data'
-        : 'community.wave.seqera.io/library/fastp:1.3.6--4df8d6c11b471bde' }"
+    // Single image for docker and singularity (Nextflow prefixes docker:// as needed).
+    // Override per pipeline in conf/modules.config: withName: 'FASTP' { container = '...' }
+    container 'community.wave.seqera.io/library/fastp:1.3.6--4df8d6c11b471bde'
 
     input:
     tuple val(meta), path(reads)   // expects [ read1, read2 ]
