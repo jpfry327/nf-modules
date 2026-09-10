@@ -1,10 +1,9 @@
 process MULTIQC {
     label 'process_low'
 
-    conda "${moduleDir}/environment.yml"
-    container "${ workflow.containerEngine in ['singularity', 'apptainer'] && !task.ext.singularity_pull_docker_container
-        ? 'https://depot.galaxyproject.org/singularity/multiqc:1.21--pyhdfd78af_0'
-        : 'quay.io/biocontainers/multiqc:1.21--pyhdfd78af_0' }"
+    // Single image for docker and singularity (Nextflow prefixes docker:// as needed).
+    // Override per pipeline in conf/modules.config: withName: 'MULTIQC' { container = '...' }
+    container 'quay.io/biocontainers/multiqc:1.21--pyhdfd78af_0'
 
     input:
     path '*'

@@ -2,10 +2,9 @@ process MACS2_CALLPEAK {
     tag "$meta.id"
     label 'process_medium'
 
-    conda "${moduleDir}/environment.yml"
-    container "${ workflow.containerEngine in ['singularity', 'apptainer'] && !task.ext.singularity_pull_docker_container
-        ? 'https://depot.galaxyproject.org/singularity/macs2:2.2.9.1--py39hff71179_1'
-        : 'quay.io/biocontainers/macs2:2.2.9.1--py39hff71179_1' }"
+    // Single image for docker and singularity (Nextflow prefixes docker:// as needed).
+    // Override per pipeline in conf/modules.config: withName: 'MACS2_CALLPEAK' { container = '...' }
+    container 'quay.io/biocontainers/macs2:2.2.9.1--py39hff71179_1'
 
     input:
     tuple val(meta), path(ipbam), path(controlbam)
